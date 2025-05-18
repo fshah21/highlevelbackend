@@ -46,7 +46,7 @@ Generate 5 tailored interview question that test the candidate's fit for the rol
       },
       {
         headers: {
-          'Authorization': `Bearer `,
+          'Authorization': `Bearer ${process.env.OPENROUTER_API_KEY}`,
           'Content-Type': 'application/json',
         },
       }
