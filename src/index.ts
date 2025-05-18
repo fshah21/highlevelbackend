@@ -4,20 +4,24 @@ import multer from 'multer';
 import pdfParse from 'pdf-parse';
 import mammoth from 'mammoth';
 import axios from 'axios';
+import dotenv from 'dotenv';
+
+// Load environment variables
+dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 3001;
 
 // Initialize Supabase client
-const supabaseUrl = process.env.SUPABASE_URL || 'https://fhbheedstzkoqbefills.supabase.co';
-const supabaseKey = process.env.SUPABASE_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZoYmhlZWRzdHprb3FiZWZpbGxzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDc1NTk4NTUsImV4cCI6MjA2MzEzNTg1NX0.De5Ith1lpZrDm_cHdcILe_ZKSFOJ7_q1qn2omUVl0fk';
+const supabaseUrl = process.env.SUPABASE_URL || "";
+const supabaseKey = process.env.SUPABASE_KEY || '';
 const supabase = createClient(supabaseUrl, supabaseKey);
 
 app.use(express.json());
 
 // Mock function to generate interview questions using a free LLM
 const generateInterviewQuestions = async (resume: string, jobDescription: string): Promise<string[]> => {
-  console.log("IN GENERATE INTERVIEW QUESTIONS");
+  console.log("IN GENERATE INTERVIEW QUESTIONS NOWWW");
   const prompt = `
 You are an AI interviewer.
 
@@ -35,6 +39,7 @@ Generate 5 tailored interview question that test the candidate's fit for the rol
 `;
 
   try {
+    console.log("OPENROUTER_API_KEY", process.env.OPENROUTER_API_KEY);
     const response = await axios.post(
       'https://openrouter.ai/api/v1/chat/completions',
       {
