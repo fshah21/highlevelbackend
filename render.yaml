@@ -1,0 +1,15 @@
+services:
+  - type: web
+    name: backend
+    env: node
+    region: oregon        # or choose your preferred region
+    plan: free
+    branch: main
+    buildCommand: npm install && npm run build
+    startCommand: npm start
+    autoDeploy: true
+    envVars:
+      - key: SUPABASE_URL
+        sync: true         # syncs from Render UI env vars
+      - key: SUPABASE_KEY
+        sync: true
