@@ -11,6 +11,7 @@ const PORT = process.env.PORT || 3001;
 // Initialize Supabase client
 const supabaseUrl = process.env.SUPABASE_URL || 'https://fhbheedstzkoqbefills.supabase.co';
 const supabaseKey = process.env.SUPABASE_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZoYmhlZWRzdHprb3FiZWZpbGxzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDc1NTk4NTUsImV4cCI6MjA2MzEzNTg1NX0.De5Ith1lpZrDm_cHdcILe_ZKSFOJ7_q1qn2omUVl0fk';
+const openRouterKey = process.env.OPENROUTER_API_KEY || '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';
 const supabase = createClient(supabaseUrl, supabaseKey);
 
 app.use(express.json());
@@ -38,7 +39,7 @@ Generate 5 tailored interview question that test the candidate's fit for the rol
     const response = await axios.post(
       'https://openrouter.ai/api/v1/chat/completions',
       {
-        model: 'mistralai/mistral-7b-instruct', // Or try 'mistralai/mixtral-8x7b-instruct'
+        model: 'mistralai/mistral-7b-instruct',
         messages: [
           { role: 'system', content: 'You are an AI assistant that generates job interview questions.' },
           { role: 'user', content: prompt }
@@ -46,7 +47,7 @@ Generate 5 tailored interview question that test the candidate's fit for the rol
       },
       {
         headers: {
-          'Authorization': `Bearer ${process.env.OPENROUTER_API_KEY}`,
+          'Authorization': `Bearer ${openRouterKey}`,
           'Content-Type': 'application/json',
         },
       }
@@ -99,7 +100,7 @@ Keep the feedback constructive and specific.`;
       },
       {
         headers: {
-          'Authorization': `Bearer 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`,
+          'Authorization': `Bearer ${openRouterKey}`,
           'Content-Type': 'application/json',
         },
       }
