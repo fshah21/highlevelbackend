@@ -5,12 +5,16 @@ import pdfParse from 'pdf-parse';
 import mammoth from 'mammoth';
 import axios from 'axios';
 import dotenv from 'dotenv';
+import cors from 'cors';
 
 // Load environment variables
 dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 3001;
+
+// Enable CORS for all routes
+app.use(cors());
 
 // Initialize Supabase client
 const supabaseUrl = process.env.SUPABASE_URL || "";
