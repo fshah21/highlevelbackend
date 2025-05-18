@@ -99,7 +99,7 @@ Keep the feedback constructive and specific.`;
       },
       {
         headers: {
-          'Authorization': `Bearer ${openRouterKey}`,
+          'Authorization': `Bearer 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`,
           'Content-Type': 'application/json',
         },
       }
