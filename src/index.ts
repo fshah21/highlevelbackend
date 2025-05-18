@@ -48,7 +48,7 @@ Generate 5 tailored interview question that test the candidate's fit for the rol
         headers: {
           'HTTP-Referer': 'https://github.com/fshah21/ai-interview-backend',
           'X-Title': 'AI Interview Backend',
-          'Authorization': 'Bearer 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',
+          'Authorization': 'Bearer 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',
           'Content-Type': 'application/json',
         },
       }
@@ -103,7 +103,7 @@ Keep the feedback constructive and specific.`;
         headers: {
           'HTTP-Referer': 'https://github.com/fshah21/ai-interview-backend',
           'X-Title': 'AI Interview Backend',
-          'Authorization': 'Bearer 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',
+          'Authorization': 'Bearer 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',
           'Content-Type': 'application/json',
         },
       }
