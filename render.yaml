@@ -13,3 +13,5 @@ services:
         sync: true         # syncs from Render UI env vars
       - key: SUPABASE_KEY
         sync: true
+      - key: OPENROUTER_API_KEY
+        sync: true
