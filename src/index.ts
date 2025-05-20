@@ -204,12 +204,12 @@ app.post('/api/contacts/addContact', async (req: Request<{}, {}, AddContactReque
   }
 });
 
-app.get('/api/contacts/getContacts', async (req: Request, res: Response) => {
+app.get('/api/contacts/getContactsByUserId/:userId', async (req: Request, res: Response) => {
   try {
     const { data: contacts, error: contactsError } = await supabase
       .from('contacts')
       .select('*')
-      .eq('created_by', req.body.created_by);
+      .eq('created_by', req.params.userId);
       
     res.status(200).json(contacts);
   } catch (error) {
