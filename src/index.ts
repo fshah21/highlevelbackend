@@ -159,8 +159,8 @@ app.post('/api/contacts/addContact', async (req: Request<{}, {}, AddContactReque
       .from('contacts')
       .select('id')
       .eq('email', email)
-      .eq('country_code', country_code)
-      .eq('number', number) 
+      .eq('phone_number->country_code', country_code)
+      .eq('phone_number->number', number)
       .single();
 
     if (existingContact) {
@@ -174,8 +174,10 @@ app.post('/api/contacts/addContact', async (req: Request<{}, {}, AddContactReque
         {
           name,
           email,
-          country_code,
-          number,
+          phone_number: {
+            country_code,
+            number
+          },
           created_by
         }
       ])
@@ -201,6 +203,21 @@ app.post('/api/contacts/addContact', async (req: Request<{}, {}, AddContactReque
     res.status(500).json({ error: error instanceof Error ? error.message : 'An error occurred' });
   }
 });
+
+app.get('/api/contacts/getContacts', async (req: Request, res: Response) => {
+  try {
+    const { data: contacts, error: contactsError } = await supabase
+      .from('contacts')
+      .select('*')
+      .eq('created_by', req.body.created_by);
+      
+    res.status(200).json(contacts);
+  } catch (error) {
+  console.error('Get contacts error:', error);
+  res.status(500).json({ error: error instanceof Error ? error.message : 'An error occurred' });
+}
+});
+
 
 // Start server
 app.listen(port, () => {
