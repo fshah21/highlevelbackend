@@ -23,9 +23,25 @@ interface LoginRequest {
   password: string;
 }
 
+interface AddContactRequest {
+  name: string;
+  email: string;
+  country_code: number;
+  number: number;
+  created_by: string;
+}
+
 interface UserResponse {
   id: string;
   username: string;
+}
+
+interface ContactResponse {
+  id: string;
+  name: string;
+  email: string;
+  country_code: number;
+  number: number;
 }
 
 const app = express();
@@ -119,6 +135,69 @@ app.post('/api/login', async (req: Request<{}, {}, LoginRequest>, res: Response)
     res.json(response);
   } catch (error) {
     console.error('Login error:', error);
+    res.status(500).json({ error: error instanceof Error ? error.message : 'An error occurred' });
+  }
+});
+
+app.post('/api/contacts/addContact', async (req: Request<{}, {}, AddContactRequest>, res: Response) => {
+  try {
+    const { name, email, country_code, number, created_by } = req.body;
+
+    // Check if user exists
+    const { data: userData, error: userError } = await supabase
+      .from('users')
+      .select('id')
+      .eq('id', created_by)
+      .single();
+
+    if (userError || !userData) {
+      return res.status(401).json({ error: 'User not found' });
+    } 
+
+    // Check if contact already exists
+    const { data: existingContact, error: existingContactError } = await supabase
+      .from('contacts')
+      .select('id')
+      .eq('email', email)
+      .eq('country_code', country_code)
+      .eq('number', number) 
+      .single();
+
+    if (existingContact) {
+      return res.status(400).json({ error: 'Contact already exists' });
+    }
+
+    // Create new contact
+    const { data: newContact, error: newContactError } = await supabase
+      .from('contacts')
+      .insert([
+        {
+          name,
+          email,
+          country_code,
+          number,
+          created_by
+        }
+      ])
+      .select()
+      .single();
+
+    if (newContactError) throw newContactError;
+
+    const response: { message: string; contact: ContactResponse } = {
+      message: 'Contact added successfully',
+      contact: {
+        id: newContact.id,
+        name: newContact.name,
+        email: newContact.email,
+        country_code: newContact.country_code,
+        number: newContact.number
+      }
+    };
+
+    res.status(201).json(response);
+  } catch (error) {
+    console.error('Add contact error:', error);
     res.status(500).json({ error: error instanceof Error ? error.message : 'An error occurred' });
   }
 });
