@@ -44,6 +44,14 @@ interface ContactResponse {
   number: number;
 }
 
+interface NoteResponse {
+  id: string;
+  contact_id: string;
+  description: string;
+  created_at: string;
+  created_by: string;
+}
+
 const app = express();
 const port = process.env.PORT || 3001;
 
@@ -217,6 +225,43 @@ app.get('/api/contacts/getContactsByUserId/:userId', async (req: Request, res: R
   res.status(500).json({ error: error instanceof Error ? error.message : 'An error occurred' });
 }
 });
+
+app.post("/api/contacts/addNote", async (req: Request, res: Response) => {
+  try {
+    const { contact_id, description, created_by } = req.body;
+
+    const { data: newNote, error: newNoteError } = await supabase 
+      .from('notes')
+      .insert([
+        {
+          contact_id,
+          description,
+          created_by
+        }
+      ])
+      .select()
+      .single();
+
+    if (newNoteError) throw newNoteError;
+
+    const response: { message: string; note: NoteResponse } = {
+      message: 'Note added successfully',
+      note: {
+        id: newNote.id,
+        contact_id: newNote.contact_id, 
+        description: newNote.description,
+        created_at: newNote.created_at,
+        created_by: newNote.created_by
+      }
+    };
+
+    res.status(201).json(response);
+
+  } catch (error) {
+    console.error('Add note error:', error);
+    res.status(500).json({ error: error instanceof Error ? error.message : 'An error occurred' });
+  }
+})
 
 
 // Start server
